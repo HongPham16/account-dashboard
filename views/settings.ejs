@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cài đặt hệ thống</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main class="app-shell narrow-shell">
+    <header class="page-header">
+      <div><span class="section-kicker">CÀI ĐẶT</span><h1>Cài đặt hệ thống</h1><p>Điều chỉnh quyền truy cập, nội dung và cách hiển thị trên trang chính.</p></div>
+      <a class="btn btn-secondary" href="/">Quay lại trang chính</a>
+    </header>
+
+    <% if (saved) { %><div class="alert alert-success">Đã lưu cài đặt thành công.</div><% } %>
+
+    <form method="post" action="/settings" class="settings-form">
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">TRUY CẬP</span><h2>Bảo vệ bằng mật khẩu</h2></div></div>
+        <div class="panel-body">
+          <label class="switch-row">
+            <div><b>Bật bảo vệ bằng mật khẩu</b><span>Khi tắt, bất kỳ ai có đường dẫn đều truy cập website trực tiếp. Khi bật, hệ thống mới yêu cầu nhập mật khẩu.</span></div>
+            <input type="checkbox" name="protect_home" <%= settings.protect_home==='1'?'checked':'' %>>
+          </label>
+          <div class="form-grid two-col top-gap">
+            <label class="form-field"><span>Mật khẩu mới</span><input type="password" name="access_password" placeholder="Để trống nếu không đổi"><small>Mật khẩu mặc định là 123456 nếu bạn chưa từng thay đổi.</small></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">CHUNG</span><h2>Thông tin hệ thống</h2></div></div>
+        <div class="panel-body form-grid two-col">
+          <label class="form-field"><span>Tên nút trên cùng</span><input name="site_title" value="<%= settings.site_title %>"></label>
+          <label class="form-field"><span>Link Zalo / link web</span><input name="zalo_url" value="<%= settings.zalo_url %>"></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">EMAIL</span><h2>Email rút tiền nhanh</h2></div></div>
+        <div class="panel-body form-grid two-col">
+          <label class="form-field"><span>Email gốc</span><input type="email" name="quick_email_base" value="<%= settings.quick_email_base %>" placeholder="example@gmail.com"></label>
+          <div class="info-card"><b>Cách hoạt động</b><span>Ví dụ example@gmail.com → example+8f12a9@gmail.com. Mỗi lần reload trang sẽ sinh một alias mới.</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">ICLOUD</span><h2>Thông tin iCloud</h2></div></div>
+        <div class="panel-body form-grid two-col">
+          <label class="form-field"><span>Tài khoản iCloud</span><input name="icloud_email" value="<%= settings.icloud_email %>"></label>
+          <label class="form-field"><span>Mật khẩu iCloud</span><input name="icloud_password" value="<%= settings.icloud_password %>"></label>
+          <label class="form-field"><span>Tên trường thông tin 1</span><input name="icloud_extra1_label" value="<%= settings.icloud_extra1_label %>"></label>
+          <label class="form-field"><span>Nội dung trường thông tin 1</span><input name="icloud_extra1_value" value="<%= settings.icloud_extra1_value %>"></label>
+          <label class="form-field"><span>Tên trường thông tin 2</span><input name="icloud_extra2_label" value="<%= settings.icloud_extra2_label %>"></label>
+          <label class="form-field"><span>Nội dung trường thông tin 2</span><input name="icloud_extra2_value" value="<%= settings.icloud_extra2_value %>"></label>
+          <label class="form-field full"><span>Link nhóm</span><input name="group_link" value="<%= settings.group_link %>"></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">VIDEO</span><h2>Đường dẫn video</h2></div></div>
+        <div class="panel-body form-grid two-col">
+          <label class="form-field"><span>Video Custom</span><input name="video_custom" value="<%= settings.video_custom %>"></label>
+          <label class="form-field"><span>Video Thường 60p</span><input name="video_normal_60" value="<%= settings.video_normal_60 %>"></label>
+          <label class="form-field"><span>Video Thường 5p</span><input name="video_normal_5" value="<%= settings.video_normal_5 %>"></label>
+          <label class="form-field"><span>Video Thường 180p</span><input name="video_normal_180" value="<%= settings.video_normal_180 %>"></label>
+          <label class="form-field"><span>Video Lite 10p</span><input name="video_lite_10" value="<%= settings.video_lite_10 %>"></label>
+          <label class="form-field"><span>Video Lite 60p</span><input name="video_lite_60" value="<%= settings.video_lite_60 %>"></label>
+          <label class="form-field"><span>Video Lite 5p</span><input name="video_lite_5" value="<%= settings.video_lite_5 %>"></label>
+          <label class="form-field"><span>Video Lite 180p</span><input name="video_lite_180" value="<%= settings.video_lite_180 %>"></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">HIỂN THỊ</span><h2>Thành phần trang chính</h2></div></div>
+        <div class="panel-body">
+          <div class="toggle-list modern-toggle-list">
+            <label><span><b>Tài khoản</b><small>Khối lấy tài khoản</small></span><input type="checkbox" name="show_accounts" <%= settings.show_accounts==='1'?'checked':'' %>></label>
+            <label><span><b>Video</b><small>Danh sách thao tác video</small></span><input type="checkbox" name="show_videos" <%= settings.show_videos==='1'?'checked':'' %>></label>
+            <label><span><b>Email rút tiền nhanh</b><small>Email alias tự đổi</small></span><input type="checkbox" name="show_quick_email" <%= settings.show_quick_email==='1'?'checked':'' %>></label>
+            <label><span><b>Thông tin iCloud</b><small>4 trường dữ liệu iCloud</small></span><input type="checkbox" name="show_icloud" <%= settings.show_icloud==='1'?'checked':'' %>></label>
+            <label><span><b>Link nhóm</b><small>Nút truy cập nhóm</small></span><input type="checkbox" name="show_group" <%= settings.show_group==='1'?'checked':'' %>></label>
+          </div>
+          <label class="form-field top-gap"><span>Thứ tự hiển thị</span><input name="section_order" value="<%= settings.section_order %>"><small>Dùng các giá trị: accounts,videos,quick_email,icloud,group</small></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><span class="section-kicker">ĐỌC MAIL</span><h2>Cấu hình đọc mail</h2></div></div>
+        <div class="panel-body form-grid two-col">
+          <label class="form-field"><span>Phương thức</span><select name="mail_reader"><option value="none" <%= settings.mail_reader==='none'?'selected':'' %>>Không dùng</option><option value="oauth" <%= settings.mail_reader==='oauth'?'selected':'' %>>OAuth</option><option value="custom" <%= settings.mail_reader==='custom'?'selected':'' %>>API tùy chỉnh</option></select></label>
+          <label class="form-field"><span>API key / token</span><input name="mail_reader_api_key" value="<%= settings.mail_reader_api_key %>"></label>
+        </div>
+      </section>
+
+      <div class="save-bar"><a class="btn btn-secondary" href="/">Hủy</a><button class="btn btn-primary btn-lg" type="submit">Lưu cài đặt</button></div>
+    </form>
+  </main>
+</body>
+</html>

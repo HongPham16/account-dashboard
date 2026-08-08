@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kho lưu trữ</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="page-header">
+      <div><span class="section-kicker">KHO RIÊNG</span><h1>Kho lưu trữ tài khoản</h1><p>Tài khoản ở đây không tham gia vào luồng cấp tài khoản tự động.</p></div>
+      <div class="header-actions"><a class="btn btn-secondary" href="/">Trang chính</a><a class="btn btn-primary" href="/accounts/add">Thêm tài khoản</a></div>
+    </header>
+    <section class="stats-grid dashboard-stats">
+      <div class="stat-card"><span>Kho cấp</span><strong><%= summary.available %></strong><small>Sẵn sàng cấp</small></div>
+      <div class="stat-card"><span>Đã lấy</span><strong><%= summary.used %></strong><small>Đang sử dụng</small></div>
+      <div class="stat-card"><span>Kho lưu trữ</span><strong><%= summary.archived %></strong><small>Tách biệt hoàn toàn</small></div>
+      <div class="stat-card"><span>Tổng</span><strong><%= summary.total %></strong><small>Tất cả tài khoản</small></div>
+    </section>
+    <% if (message) { %><div class="alert alert-success"><%= message %></div><% } %>
+    <section class="panel">
+      <div class="panel-heading"><div><span class="section-kicker">DANH SÁCH</span><h2>Tài khoản đã lưu trữ</h2></div><span class="status-pill neutral"><%= accounts.length %> mục</span></div>
+      <div class="panel-body">
+        <% if (!accounts.length) { %>
+          <div class="empty-state"><div class="empty-icon">▣</div><b>Kho lưu trữ đang trống</b><span>Khi người dùng yêu cầu lưu trữ tài khoản vừa lấy, dữ liệu sẽ xuất hiện tại đây.</span></div>
+        <% } else { %>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Tài khoản</th><th>Mật khẩu</th><th>2FA</th><th>Thời gian lưu</th><th>Thao tác</th></tr></thead>
+              <tbody>
+              <% accounts.forEach(a => { %>
+                <tr>
+                  <td>#<%= a.id %></td>
+                  <td class="mono"><%= a.username %></td>
+                  <td class="mono"><%= a.password %></td>
+                  <td><%= a.twofa_secret ? 'Có' : 'Không' %></td>
+                  <td><%= a.archived_at || '-' %></td>
+                  <td><div class="table-actions"><form method="post" action="/accounts/storage/<%= a.id %>/restore" onsubmit="return confirm('Khôi phục tài khoản này về kho cấp?')"><button class="btn btn-secondary btn-sm">Khôi phục về kho cấp</button></form><form method="post" action="/accounts/storage/<%= a.id %>/delete" onsubmit="return confirm('Xóa vĩnh viễn tài khoản này?')"><button class="btn btn-danger btn-sm">Xóa</button></form></div></td>
+                </tr>
+              <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

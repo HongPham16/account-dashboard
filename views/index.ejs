@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= settings.site_title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <div class="eyebrow">CONTROL CENTER</div>
+        <h1>Hệ thống thao tác nhanh</h1>
+        <p>Quản lý tài khoản, video, email và iCloud trên một giao diện duy nhất.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn btn-secondary" href="<%= settings.zalo_url %>">Mở Zalo / Web</a>
+        <a class="btn btn-primary" href="/settings">Cài đặt hệ thống</a>
+        <% if (isProtected) { %>
+          <form method="post" action="/lock"><button class="btn btn-danger" type="submit">Khóa hệ thống</button></form>
+        <% } %>
+      </div>
+    </header>
+
+    <section class="stats-grid dashboard-stats">
+      <div class="stat-card"><span>Kho cấp</span><strong id="availableCount"><%= summary.available %></strong><small>Sẵn sàng cấp</small></div>
+      <div class="stat-card"><span>Đã lấy</span><strong id="usedCount"><%= summary.used %></strong><small>Đang được sử dụng</small></div>
+      <div class="stat-card"><span>Kho lưu trữ</span><strong id="archiveCount"><%= summary.archived %></strong><small>Kho riêng biệt</small></div>
+      <div class="stat-card"><span>Tổng dữ liệu</span><strong id="totalCount"><%= summary.total %></strong><small>Tất cả tài khoản</small></div>
+    </section>
+
+    <section class="quick-links">
+      <a href="/accounts/add" class="quick-link"><span class="quick-icon">＋</span><div><b>Thêm tài khoản</b><small>Đưa dữ liệu mới vào kho cấp</small></div></a>
+      <a href="/accounts/storage" class="quick-link"><span class="quick-icon">▣</span><div><b>Kho lưu trữ</b><small>Xem tài khoản đã được đưa vào kho riêng</small></div></a>
+      <a href="/settings" class="quick-link"><span class="quick-icon">⚙</span><div><b>Cấu hình</b><small>Hiển thị, mật khẩu và dữ liệu hệ thống</small></div></a>
+    </section>
+
+    <% for (const section of order) { %>
+      <% if (section === 'accounts' && settings.show_accounts === '1') { %>
+        <section class="panel account-panel">
+          <div class="panel-heading">
+            <div><span class="section-kicker">TÀI KHOẢN</span><h2>Lấy tài khoản</h2></div>
+            <span class="status-pill"><span class="dot"></span><span id="stockText"><%= summary.available %> tài khoản khả dụng</span></span>
+          </div>
+          <div class="panel-body">
+            <div id="accountEmpty" class="empty-state">
+              <div class="empty-icon">◎</div>
+              <b>Chưa lấy tài khoản</b>
+              <span>Nhấn nút bên dưới để lấy tài khoản tiếp theo trong kho cấp.</span>
+            </div>
+
+            <div id="accountResult" class="account-result hidden">
+              <div class="result-head">
+                <div><span class="section-kicker">TÀI KHOẢN VỪA LẤY</span><h3>Thông tin đăng nhập</h3></div>
+                <span class="success-chip">Đã cấp</span>
+              </div>
+              <div class="data-grid">
+                <div class="data-field"><label>Tài khoản</label><div class="value-row"><strong id="rUsername"></strong><button class="copy-btn" data-copy="#rUsername">Sao chép</button></div></div>
+                <div class="data-field"><label>Mật khẩu</label><div class="value-row"><strong id="rPassword"></strong><button class="copy-btn" data-copy="#rPassword">Sao chép</button></div></div>
+                <div id="twofaRow" class="data-field hidden"><label>Mã 2FA <small id="rTotpTime"></small></label><div class="value-row"><strong class="totp-code" id="rTotp"></strong><button class="copy-btn" data-copy="#rTotp">Sao chép</button></div></div>
+                <div class="data-field full"><label>Dữ liệu gốc</label><div class="value-row"><code id="rRaw"></code><button class="copy-btn" data-copy="#rRaw">Sao chép</button></div></div>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button id="claimBtn" class="btn btn-primary btn-lg">Lấy tài khoản</button>
+              <button id="archiveBtn" class="btn btn-warning btn-lg hidden">Yêu cầu đưa vào kho lưu trữ</button>
+            </div>
+            <p class="note">Kho lưu trữ là kho riêng. Tài khoản chuyển vào đó sẽ không được cấp lại qua nút “Lấy tài khoản”.</p>
+          </div>
+        </section>
+      <% } %>
+
+      <% if (section === 'videos' && settings.show_videos === '1') { %>
+        <section class="panel">
+          <div class="panel-heading"><div><span class="section-kicker">VIDEO</span><h2>Danh sách thao tác</h2></div></div>
+          <div class="panel-body">
+            <div class="button-grid">
+              <a class="action-card" href="<%= settings.video_custom %>"><b>Video Custom</b><span>Kho video tùy chỉnh</span></a>
+              <a class="action-card" href="<%= settings.video_normal_60 %>"><b>Video Thường 60p</b><span>Mở thao tác video</span></a>
+              <a class="action-card" href="<%= settings.video_normal_5 %>"><b>Video Thường 5p</b><span>Mở thao tác video</span></a>
+              <a class="action-card" href="<%= settings.video_normal_180 %>"><b>Video Thường 180p</b><span>Mở thao tác video</span></a>
+              <a class="action-card" href="<%= settings.video_lite_10 %>"><b>Video Lite 10p</b><span>Mở thao tác video</span></a>
+              <a class="action-card" href="<%= settings.video_lite_60 %>"><b>Video Lite 60p</b><span>Mở thao tác video</span></a>
+              <a class="action-card" href="<%= settings.video_lite_5 %>"><b>Video Lite 5p</b><span>Mở thao tác video</span></a>
+              <a class="action-card" href="<%= settings.video_lite_180 %>"><b>Video Lite 180p</b><span>Mở thao tác video</span></a>
+            </div>
+          </div>
+        </section>
+      <% } %>
+
+      <% if (section === 'quick_email' && settings.show_quick_email === '1') { %>
+        <section class="panel">
+          <div class="panel-heading"><div><span class="section-kicker">EMAIL</span><h2>Email rút tiền nhanh</h2></div><span class="status-pill neutral">Tự đổi khi reload</span></div>
+          <div class="panel-body">
+            <div class="copy-box"><div><label>Email hiện tại</label><strong id="quickEmail"><%= quickEmailAlias %></strong></div><button class="copy-btn" data-copy="#quickEmail">Sao chép</button></div>
+            <p class="note">Email gốc được cấu hình trong Cài đặt. Mỗi lần tải lại trang, hệ thống sinh một alias mới bằng dấu +.</p>
+          </div>
+        </section>
+      <% } %>
+
+      <% if (section === 'icloud' && settings.show_icloud === '1') { %>
+        <section class="panel">
+          <div class="panel-heading"><div><span class="section-kicker">ICLOUD</span><h2>Thông tin iCloud</h2></div></div>
+          <div class="panel-body">
+            <div class="data-grid">
+              <div class="data-field"><label>Tài khoản</label><div class="value-row"><strong id="icloudEmail"><%= settings.icloud_email %></strong><button class="copy-btn" data-copy="#icloudEmail">Sao chép</button></div></div>
+              <div class="data-field"><label>Mật khẩu</label><div class="value-row"><strong id="icloudPassword"><%= settings.icloud_password %></strong><button class="copy-btn" data-copy="#icloudPassword">Sao chép</button></div></div>
+              <div class="data-field"><label><%= settings.icloud_extra1_label || 'Thông tin 1' %></label><div class="value-row"><strong id="icloudExtra1"><%= settings.icloud_extra1_value %></strong><button class="copy-btn" data-copy="#icloudExtra1">Sao chép</button></div></div>
+              <div class="data-field"><label><%= settings.icloud_extra2_label || 'Thông tin 2' %></label><div class="value-row"><strong id="icloudExtra2"><%= settings.icloud_extra2_value %></strong><button class="copy-btn" data-copy="#icloudExtra2">Sao chép</button></div></div>
+            </div>
+          </div>
+        </section>
+      <% } %>
+
+      <% if (section === 'group' && settings.show_group === '1') { %>
+        <section class="panel">
+          <div class="panel-heading"><div><span class="section-kicker">NHÓM</span><h2>Link nhóm</h2></div></div>
+          <div class="panel-body"><a class="btn btn-primary btn-lg full-width" href="<%= settings.group_link %>">Mở Link 1</a></div>
+        </section>
+      <% } %>
+    <% } %>
+  </main>
+  <div id="toast" class="toast"></div>
+  <script src="/js/app.js"></script>
+</body>
+</html>

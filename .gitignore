@@ -1,0 +1,13 @@
+node_modules/
+.env
+npm-debug.log*
+.DS_Store
+
+# Database local không đưa lên GitHub.
+database/*.db
+database/*.db-shm
+database/*.db-wal
+
+# SQLite đặt trên Railway Volume ở production.
+*.sqlite-shm
+*.sqlite-wal

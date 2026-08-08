@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mở khóa hệ thống</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <div class="auth-icon">⌁</div>
+    <span class="section-kicker">TRUY CẬP ĐƯỢC BẢO VỆ</span>
+    <h1>Nhập mật khẩu</h1>
+    <p><%= siteTitle || 'Hệ thống thao tác nhanh' %></p>
+    <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+    <form method="post" action="/unlock" class="stack">
+      <label class="form-field"><span>Mật khẩu</span><input type="password" name="password" autocomplete="current-password" autofocus required></label>
+      <button class="btn btn-primary btn-lg full-width" type="submit">Mở hệ thống</button>
+    </form>
+  </main>
+</body>
+</html>

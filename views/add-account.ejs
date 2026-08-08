@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Thêm tài khoản</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="page-header">
+      <div>
+        <span class="section-kicker">KHO CẤP</span>
+        <h1>Thêm tài khoản</h1>
+        <p>Các tài khoản còn trong kho được hiển thị trực tiếp trong ô bên dưới.</p>
+      </div>
+      <div class="action-row">
+        <a class="btn btn-secondary" href="/accounts/storage">Kho lưu trữ</a>
+        <a class="btn btn-secondary" href="/">Quay lại</a>
+      </div>
+    </header>
+
+    <% if (message) { %><div class="alert alert-success"><%= message %></div><% } %>
+    <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div><span class="section-kicker">THÊM MỚI</span><h2>Thêm tài khoản vào kho cấp</h2></div>
+      </div>
+      <div class="panel-body">
+        <form method="post" action="/accounts/add" class="stack">
+          <label class="form-field">
+            <span>Danh sách tài khoản (<%= accounts.length %> tài khoản trong kho)</span>
+            <textarea name="accounts" rows="12" placeholder="user1@example.com|pass123|JBSWY3DPEHPK3PXP&#10;user2@example.com|pass456"><%= accounts.map(a => a.raw_data).join('\n') %></textarea>
+            <small>Mỗi dòng: Email|Pass|2FA hoặc Email Pass 2FA. Bạn có thể thêm, sửa hoặc xóa dòng trực tiếp rồi lưu.</small>
+          </label>
+          <div class="action-row"><button class="btn btn-primary btn-lg" type="submit">Lưu kho tài khoản</button></div>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
